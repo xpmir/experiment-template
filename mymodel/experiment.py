@@ -8,12 +8,13 @@ import xpmir.evaluation
 from xpmir.papers.cli import paper_command
 from xpmir.papers.results import PaperResults
 from configuration import MyModel
+from xpmir.experiments.ir import ir_experiment, ExperimentHelper
 
 logging.basicConfig(level=logging.INFO)
 
-
+@ir_experiment()
 def run(
-    xp: experiment, cfg: MyModel, tensorboard_service: TensorboardService
+    helper: ExperimentHelper, cfg: MyModel
 ) -> PaperResults:
     """My model"""
 
@@ -33,11 +34,3 @@ def run(
         tb_logs={"MyModel-RR@10": learner.logpath},
     )
 
-
-@paper_command(schema=MyModel, folder=__file__, tensorboard_service=True)
-def cli(xp: experiment, cfg: MyModel, tensorboard_service: TensorboardService):
-    return run(xp, cfg, tensorboard_service)
-
-
-if __name__ == "__main__":
-    cli()
